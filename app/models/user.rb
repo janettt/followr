@@ -57,7 +57,7 @@ class User < ActiveRecord::Base
                     twitter_follow_preference.rate_limit_until > DateTime.now
 
     followed_in_last_hour = twitter_follows.where('followed_at > ?', 1.hour.ago)
-    return false if followed_in_last_hour.count >= 50
+    return false if followed_in_last_hour.count >= 5
     true
   end
 

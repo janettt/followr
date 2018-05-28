@@ -48,17 +48,19 @@ namespace :twitter do
             twitter_user = search_result.user
             (1 - (twitter_user.followers_count / twitter_user.friends_count.to_f)).abs
           end
-          .take(6)
+          .take(5)
           .each do |search_result|
             username = search_result.user.screen_name.to_s
             tweet = search_result.tweet
 
             client.favorite(tweet) if tweet.favorite_count.positive? || tweet.retweet_count.positive?
+            sleep(15)
             client.friendship_update(username, wants_retweets: false)
             client.mute(username) # don't show their tweets in our feed
             followed = client.follow(username)
 
             TwitterFollow.follow!(user, search_result) if followed
+            sleep(60)
           end
       rescue Twitter::Error::TooManyRequests => e
         # rate limited - set rate_limit_until timestamp
